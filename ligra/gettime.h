@@ -76,7 +76,7 @@ struct timer {
   }
 
   void reportT(double time) {
-    std::cout << std::setprecision(3) << time <<  std::endl;;
+    std::cout << std::setprecision(3) << time;
   }
 
   void reportTime(double time) {
@@ -101,7 +101,11 @@ struct timer {
 
   void reportNext() {reportTime(next());}
 
-  void reportNext(std::string str) {std::cout << str << " : "; reportNext();}
+  void reportNext(std::string str) {
+    //std::cout << str << " : "; reportNext();
+    std::cout << str; 
+    reportNext();
+  }
 };
 
 static timer _tm;

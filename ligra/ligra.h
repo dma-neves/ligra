@@ -42,6 +42,8 @@
 #include "edgeMap_utils.h"
 using namespace std;
 
+#define OUTPUT_CSV
+
 //*****START FRAMEWORK*****
 
 typedef uint32_t flags;
@@ -470,6 +472,11 @@ template<class vertex>
 void Compute(hypergraph<vertex>&, commandLine);
 
 int parallel_main(int argc, char* argv[]) {
+
+  #ifdef OUTPUT_CSV
+  std::cout << "graph_load_time,mean_algorithm_time,result_sync_time" << std::endl;
+  #endif
+
   commandLine P(argc,argv," [-s] <inFile>");
   char* iFile = P.getArgument(0);
   bool symmetric = P.getOptionValue("-s");
@@ -484,18 +491,30 @@ int parallel_main(int argc, char* argv[]) {
       startTime();
       graph<compressedSymmetricVertex> G =
         readCompressedGraph<compressedSymmetricVertex>(iFile,symmetric,mmap); //symmetric graph
-      nextTime("Graph load time");
+      			#ifdef OUTPUT_CSV
+			nextTime("");
+			#else
+			nextTime("Graph load time : "); std::cout << std::endl;
+			#endif
 #else
       startTime();
       hypergraph<compressedSymmetricVertex> G =
         readCompressedHypergraph<compressedSymmetricVertex>(iFile,symmetric,mmap); //symmetric graph
-      nextTime("Graph load time");
+      			#ifdef OUTPUT_CSV
+			nextTime("");
+			#else
+			nextTime("Graph load time : "); std::cout << std::endl;
+			#endif
 #endif
       Compute(G,P);
       for(int r=0;r<rounds;r++) {
         startTime();
         Compute(G,P);
-        nextTime("Running time");
+			#ifdef OUTPUT_CSV
+			nextTime(",");
+			#else
+			nextTime("Running time : "); std::cout << std::endl;
+			#endif
       }
       G.del();
     } else {
@@ -503,19 +522,31 @@ int parallel_main(int argc, char* argv[]) {
       startTime();
       graph<compressedAsymmetricVertex> G =
         readCompressedGraph<compressedAsymmetricVertex>(iFile,symmetric,mmap); //asymmetric graph
-      nextTime("Graph load time");
+      			#ifdef OUTPUT_CSV
+			nextTime("");
+			#else
+			nextTime("Graph load time : "); std::cout << std::endl;
+			#endif
 #else
       startTime();
       hypergraph<compressedAsymmetricVertex> G =
         readCompressedHypergraph<compressedAsymmetricVertex>(iFile,symmetric,mmap); //asymmetric graph
-      nextTime("Graph load time");
+      			#ifdef OUTPUT_CSV
+			nextTime("");
+			#else
+			nextTime("Graph load time : "); std::cout << std::endl;
+			#endif
 #endif
       Compute(G,P);
       if(G.transposed) G.transpose();
       for(int r=0;r<rounds;r++) {
         startTime();
         Compute(G,P);
-        nextTime("Running time");
+			#ifdef OUTPUT_CSV
+			nextTime(",");
+			#else
+			nextTime("Running time : "); std::cout << std::endl;
+			#endif
         if(G.transposed) G.transpose();
       }
       G.del();
@@ -526,18 +557,30 @@ int parallel_main(int argc, char* argv[]) {
       startTime();
       graph<symmetricVertex> G =
         readGraph<symmetricVertex>(iFile,compressed,symmetric,binary,mmap); //symmetric graph
-      nextTime("Graph load time");
+      			#ifdef OUTPUT_CSV
+			nextTime("");
+			#else
+			nextTime("Graph load time : "); std::cout << std::endl;
+			#endif
 #else
       startTime();
       hypergraph<symmetricVertex> G =
         readHypergraph<symmetricVertex>(iFile,compressed,symmetric,binary,mmap); //symmetric graph
-      nextTime("Graph load time");
+      			#ifdef OUTPUT_CSV
+			nextTime("");
+			#else
+			nextTime("Graph load time : "); std::cout << std::endl;
+			#endif
 #endif
       Compute(G,P);
       for(int r=0;r<rounds;r++) {
         startTime();
         Compute(G,P);
-        nextTime("Running time");
+			#ifdef OUTPUT_CSV
+			nextTime(",");
+			#else
+			nextTime("Running time : "); std::cout << std::endl;
+			#endif
       }
       G.del();
     } else {
@@ -545,23 +588,39 @@ int parallel_main(int argc, char* argv[]) {
       startTime();
       graph<asymmetricVertex> G =
         readGraph<asymmetricVertex>(iFile,compressed,symmetric,binary,mmap); //asymmetric graph
-      nextTime("Graph load time");
+      			#ifdef OUTPUT_CSV
+			nextTime("");
+			#else
+			nextTime("Graph load time : "); std::cout << std::endl;
+			#endif
 #else
       startTime();
       hypergraph<asymmetricVertex> G =
         readHypergraph<asymmetricVertex>(iFile,compressed,symmetric,binary,mmap); //asymmetric graph
-      nextTime("Graph load time");
+      			#ifdef OUTPUT_CSV
+			nextTime("");
+			#else
+			nextTime("Graph load time : "); std::cout << std::endl;
+			#endif
 #endif
       Compute(G,P);
       if(G.transposed) G.transpose();
       for(int r=0;r<rounds;r++) {
         startTime();
         Compute(G,P);
-        nextTime("Running time");
+			#ifdef OUTPUT_CSV
+			nextTime(",");
+			#else
+			nextTime("Running time : "); std::cout << std::endl;
+			#endif
         if(G.transposed) G.transpose();
       }
       G.del();
     }
   }
+
+  #ifdef OUTPUT_CSV
+  std::cout << ",0";
+  #endif
 }
 #endif
