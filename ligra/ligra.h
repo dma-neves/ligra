@@ -481,11 +481,15 @@ int parallel_main(int argc, char* argv[]) {
   if (compressed) {
     if (symmetric) {
 #ifndef HYPER
+      startTime();
       graph<compressedSymmetricVertex> G =
         readCompressedGraph<compressedSymmetricVertex>(iFile,symmetric,mmap); //symmetric graph
+      nextTime("Graph load time");
 #else
+      startTime();
       hypergraph<compressedSymmetricVertex> G =
         readCompressedHypergraph<compressedSymmetricVertex>(iFile,symmetric,mmap); //symmetric graph
+      nextTime("Graph load time");
 #endif
       Compute(G,P);
       for(int r=0;r<rounds;r++) {
@@ -496,11 +500,15 @@ int parallel_main(int argc, char* argv[]) {
       G.del();
     } else {
 #ifndef HYPER
+      startTime();
       graph<compressedAsymmetricVertex> G =
         readCompressedGraph<compressedAsymmetricVertex>(iFile,symmetric,mmap); //asymmetric graph
+      nextTime("Graph load time");
 #else
+      startTime();
       hypergraph<compressedAsymmetricVertex> G =
         readCompressedHypergraph<compressedAsymmetricVertex>(iFile,symmetric,mmap); //asymmetric graph
+      nextTime("Graph load time");
 #endif
       Compute(G,P);
       if(G.transposed) G.transpose();
@@ -515,11 +523,15 @@ int parallel_main(int argc, char* argv[]) {
   } else {
     if (symmetric) {
 #ifndef HYPER
+      startTime();
       graph<symmetricVertex> G =
         readGraph<symmetricVertex>(iFile,compressed,symmetric,binary,mmap); //symmetric graph
+      nextTime("Graph load time");
 #else
+      startTime();
       hypergraph<symmetricVertex> G =
         readHypergraph<symmetricVertex>(iFile,compressed,symmetric,binary,mmap); //symmetric graph
+      nextTime("Graph load time");
 #endif
       Compute(G,P);
       for(int r=0;r<rounds;r++) {
@@ -530,11 +542,15 @@ int parallel_main(int argc, char* argv[]) {
       G.del();
     } else {
 #ifndef HYPER
+      startTime();
       graph<asymmetricVertex> G =
         readGraph<asymmetricVertex>(iFile,compressed,symmetric,binary,mmap); //asymmetric graph
+      nextTime("Graph load time");
 #else
+      startTime();
       hypergraph<asymmetricVertex> G =
         readHypergraph<asymmetricVertex>(iFile,compressed,symmetric,binary,mmap); //asymmetric graph
+      nextTime("Graph load time");
 #endif
       Compute(G,P);
       if(G.transposed) G.transpose();
