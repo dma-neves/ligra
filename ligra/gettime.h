@@ -27,6 +27,8 @@
 #include <iomanip>
 #include <iostream>
 
+#define PRINT_MILLI
+
 struct timer {
   double totalTime;
   double lastTime;
@@ -76,7 +78,11 @@ struct timer {
   }
 
   void reportT(double time) {
+    #ifdef PRINT_MILLI
+    std::cout << std::setprecision(3) << time*1000;
+    #else
     std::cout << std::setprecision(3) << time;
+    #endif
   }
 
   void reportTime(double time) {

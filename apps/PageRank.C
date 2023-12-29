@@ -23,6 +23,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ligra.h"
 #include "math.h"
+#include <climits>
 
 template <class vertex>
 struct PR_F {
@@ -68,9 +69,9 @@ struct PR_Vertex_Reset {
 
 template <class vertex>
 void Compute(graph<vertex>& GA, commandLine P) {
-  long maxIters = P.getOptionLongValue("-maxiters",100);
+  long maxIters = P.getOptionLongValue("-maxiters",INT_MAX);
   const intE n = GA.n;
-  const double damping = 0.85, epsilon = 0.0000001;
+  const double damping = 0.85, epsilon = 0.000001;
   
   double one_over_n = 1/(double)n;
   double* p_curr = newA(double,n);
